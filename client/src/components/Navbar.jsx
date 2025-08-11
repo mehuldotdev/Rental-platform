@@ -32,7 +32,7 @@ const Navbar = ({setShowLogin}) => {
             ))}
 
             <div className='lg:flex items-start text-sm gap-2 px-3'>
-                <Input className="rounded-full max-w-45" type="text" placeholder="Search for products"/>
+                <Input className="rounded-full max-w-45" type="text" placeholder="Search for cars..."/>
             </div>
         
 
