@@ -3,7 +3,7 @@ import Title from './Title'
 import { dummyCarData } from '../assets/assets'
 import CarCard from './CarCard'
 import { Button } from "@/components/ui/button"
-import { ArrowBigRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const FeaturedSection = () => {
@@ -27,10 +27,10 @@ const FeaturedSection = () => {
 
         </div>
 
-        <Button onClick={()=> {
+        <Button className="mt-5" onClick={()=> {
             navigate("/cars"); scrollTo(0,0);
         }}>
-            Explore all cars<ArrowBigRight /></Button>
+            Explore all cars<ArrowRight /></Button>
 
     </div>
   )

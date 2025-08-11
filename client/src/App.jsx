@@ -4,6 +4,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import CardDetails from './pages/CardDetails.jsx';
 import Cars from './pages/Cars.jsx';
+import Footer from './components/Footer.jsx';
 import MyBookings from './pages/MyBookings.jsx';
 
 
@@ -22,6 +23,7 @@ const App = () => {
         <Route path ="/cars" element={<Cars/>} />
         <Route path ="/my-bookings" element={<MyBookings/>} />
       </Routes>
+      {!isOwnerPath && <Footer />}
     </>
   )
 }

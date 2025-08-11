@@ -13,7 +13,7 @@ const Navbar = ({setShowLogin}) => {
     const navigate = useNavigate()
 
   return (
-    <div className={`flex items-center justify-between px-6 md:px-6 lg:px-24xl:px-3 py-4 border-b border-borderColour relative transition-all ${location.pathname === "/" && "bg-light"}`}>
+    <div className={`bg-black flex items-center justify-between px-6 md:px-6 lg:px-24xl:px-3 py-4 border-b border-borderColour relative transition-all ${location.pathname === "/" && "bg-light"}`}>
         <Link to='/'>
         <img src={assets.logo} alt="Logo" />
         </Link>
