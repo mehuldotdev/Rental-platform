@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { assets, dummyMyBookingsData } from '../assets/assets'
 
+// git commits working
+
 const MyBookings = () => {
   const currency = import.meta.env.VITE_CURRENCY
   const [bookings, setbookings] = useState([])
