@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { assets, dummyMyBookingsData } from '../assets/assets'
 
-// git commits working
+// git commits working or not
 
 const MyBookings = () => {
   const currency = import.meta.env.VITE_CURRENCY
