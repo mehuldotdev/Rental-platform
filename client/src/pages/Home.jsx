@@ -8,6 +8,7 @@ import Testimonial from '../components/Newsletter.jsx'
 import Footer from '../components/Footer.jsx'
 
 const Home = () => {
+  window.scrollTo(0, 0)
   return (
     <>
         <Hero />

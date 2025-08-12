@@ -10,6 +10,9 @@ const CardDetails = () => {
   const handleSubmit = async(e) => {
     e.preventdefault();
   }
+
+  window.scrollTo(0, 0)
+
   const currency = import.meta.env.VITE_CURRENCY
   const {id} = useParams()
   const navigate = useNavigate()
