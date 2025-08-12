@@ -13,30 +13,29 @@ const Navbar = ({setShowLogin}) => {
     const navigate = useNavigate()
 
   return (
-    <div className={`bg-black flex items-center justify-between px-6 md:px-6 lg:px-24xl:px-3 py-4 border-b border-borderColour relative transition-all ${location.pathname === "/" && "bg-light"}`}>
+    <div className={`bg-black flex items-center justify-between px-6 md:px-6 lg:px-24xl:px-3 py-4 border-b relative transition-all ${location.pathname === "/" && "bg-amber-300"}`}>
         <Link to='/'>
         <img src={assets.logo} alt="Logo" />
         </Link>
         
-        <div className={`max-sm:fixed max-sm:h-screen max-sm:w-full
-        max-sm:top-16 max-sm:border-t border-borderColor
-        right-0 flex flex-col sm:flex-row
+        <div className={`max-sm:absolute max-sm:top-full max-sm:left-0 max-sm:w-full
+        flex flex-col sm:flex-row
         items-start sm:items-center gap-4 sm:gap-8
-        max-sm:p-4 transition-all duration-200 z-50 ${location.pathname=== "/" ? "bg-light" : "bg-red"}
-        ${open ? "max-sm:translate-x-0" : "max-sm:translate-x-full"}`}>
-            
+        max-sm:p-4 max-sm:gap-3 transition-all duration-200 z-50 
+        ${location.pathname === "/" ? "max-sm:bg-white max-sm:shadow-lg" : "max-sm:bg-gray-900 max-sm:shadow-lg"}
+        ${open ? "max-sm:opacity-100 max-sm:visible" : "max-sm:opacity-0 max-sm:invisible max-sm:pointer-events-none"}`}>
             {menuLinks.map((link, index) => (
-                <Link key={index} to={link.path}>
+                <Link key={index} to={link.path} className="max-sm:text-black max-sm:font-medium max-sm:py-1">
                     {link.name}
                 </Link>
             ))}
 
-            <div className='lg:flex items-start text-sm gap-2 px-3'>
-                <Input className="rounded-full max-w-45" type="text" placeholder="Search for cars..."/>
+            <div className='lg:flex items-start text-sm gap-2 px-3 max-sm:px-0'>
+                <Input className="rounded-full max-w-45 max-sm:w-full" type="text" placeholder="Search for cars..."/>
             </div>
         
 
-        <div className='flex gap-5'>
+        <div className='flex gap-5 max-sm:flex-col max-sm:gap-2'>
             <Button onClick={()=>navigate('/owner')} className="cursor-pointer">Dashboard</Button>
             <Button onClick={()=>setShowLogin(true)} className="bg-blue-700 cursor-pointer">Log in</Button>
         </div>
