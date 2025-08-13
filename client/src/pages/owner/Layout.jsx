@@ -1,7 +1,7 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 import NavbarOwner from '../../components/owner/NavbarOwner.jsx'
 import Sidebar from '../../components/owner/Sidebar.jsx'
-import Dashboard from './Dashboard.jsx'
 
 const Layout = () => {
   return (
@@ -9,7 +9,7 @@ const Layout = () => {
         <NavbarOwner />
         <div className='flex'>
         <Sidebar />
-        <Dashboard />
+        <Outlet />
         </div>
     </div>
   )
