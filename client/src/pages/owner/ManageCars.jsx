@@ -27,67 +27,8 @@ const ManageCars = () => {
     fetchOwnercars()
   }, [])
 
-  const programmingLanguages = [
-  {
-    id: "1",
-    name: "JavaScript",
-    releaseYear: "1995",
-    developer: "Brendan Eich",
-    typing: "Dynamic",
-    paradigm: "Multi-paradigm",
-    extension: ".js",
-    latestVersion: "ES2021",
-    popularity: "High",
-  },
-  {
-    id: "2",
-    name: "Python",
-    releaseYear: "1991",
-    developer: "Guido van Rossum",
-    typing: "Dynamic",
-    paradigm: "Multi-paradigm",
-    extension: ".py",
-    latestVersion: "3.10",
-    popularity: "High",
-  },
-  {
-    id: "3",
-    name: "Java",
-    releaseYear: "1995",
-    developer: "James Gosling",
-    typing: "Static",
-    paradigm: "Object-oriented",
-    extension: ".java",
-    latestVersion: "17",
-    popularity: "High",
-  },
-  {
-    id: "4",
-    name: "C++",
-    releaseYear: "1985",
-    developer: "Bjarne Stroustrup",
-    typing: "Static",
-    paradigm: "Multi-paradigm",
-    extension: ".cpp",
-    latestVersion: "C++20",
-    popularity: "High",
-  },
-  {
-    id: "5",
-    name: "Ruby",
-    releaseYear: "1995",
-    developer: "Yukihiro Matsumoto",
-    typing: "Dynamic",
-    paradigm: "Multi-paradigm",
-    extension: ".rb",
-    latestVersion: "3.0",
-    popularity: "Low",
-  },
-]
-
-
   return (
-    <div className='flex flex-col w-full lg:px-20 px-10 mt-10'>
+    <div className='lg:px-20 px-10 mt-10'>
       <h1 className='text-4xl font-medium'>Manage Cars</h1>
       <p className='mt-5 text-white/50 sm:text-1xl'>View all listed cars, update their details, or remove them from the booking platform.</p>
       <div className="bg-black overflow-hidden mt-10 rounded-lg border-1">
@@ -128,7 +69,7 @@ const ManageCars = () => {
           </TableBody>
         </Table>
       </div>
-      </div>
+    </div>
   )
 }
 

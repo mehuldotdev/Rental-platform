@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { cityList } from '../assets/assets';
 import { Button } from "@/components/ui/button"
 import { SearchIcon } from 'lucide-react';
+import Bluecar from '../assets/Bluecar.png'
 
 const Hero = () => {
 
     const [pickupLocation, setpickupLocation] = useState("")
 
   return (
-    <div className='h-screen flex flex-col justify-center items-center gap-14 bg-light text-white text-center'>
+    <div className='mt-20 h-screen flex flex-col justify-center items-center gap-14 bg-light text-white text-center'>
         <h1 className='text-4xl md:text-5xl font-semibold'>Wheels rolling, stories unfolding.</h1>
 
         <form className='text-black font-semibold flex flex-col md:flex-row items-start md:items-center justify-between p-6 rounded-lg md:rounded-full w-full max-w-80 md:max-w-200 bg-white shadow-[0px_8px_20px_rgba(0,0,0,0.1)]'>
@@ -33,6 +34,8 @@ const Hero = () => {
                     <SearchIcon></SearchIcon>
                 </Button>
                 </form>
+
+                <img className='h-70 w-150 object-cover' src={Bluecar} alt="Blue car" />
     </div>
     
   )
