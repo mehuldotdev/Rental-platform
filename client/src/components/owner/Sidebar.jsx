@@ -15,7 +15,7 @@ const Sidebar = () => {
     }
 
   return (
-    <div className='relative min-h-screen md:flex flex-col items-center pt-8 w-30 lg:w-50 border-r text-sm'>
+    <div className='relative min-h-screen md:flex flex-col items-center pt-10 w-30 lg:w-50 border-r text-sm'>
         <div className='group relative'>
             <label htmlFor="image">
                 <img className='rounded-full lg:w-14 lg:h-14 h-9 md:h-14 w-9 md:w-14 mx-auto' src={image ? URL.createObjectURL(image) : user?.image || "https://unsplash.com/photos/FVNCHQiQCq4" } alt="" />

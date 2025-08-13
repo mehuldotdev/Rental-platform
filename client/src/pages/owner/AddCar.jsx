@@ -33,9 +33,9 @@ const AddCar = () => {
   }
 
   return (
-    <div className='px-4 py-10 md:px-10 flex-1'>
-      <h1 className='text-2xl font-bold text-white mb-2'>Add New Car</h1>
-      <p className='text-white/70 mb-6'>Fill in details to list a new car for booking, including pricing, availability, and car specifications</p>
+    <div className='lg:px-20 px-10 mt-10 flex-1'>
+      <h1 className='text-4xl font-medium'>Add New Car</h1>
+      <p className='mt-5 text-white/50 sm:text-1xl'>Fill in details to list a new car for booking, including pricing, availability, and car specifications</p>
       
       <form onSubmit={onSubmitHandler} className='flex flex-col gap-5 text-white text-sm mt-6 max-w-xl'>
         {/* Car Image */}
