@@ -4,7 +4,7 @@ import { changeBookingStatus, checkAvailabilityofCar, createBooking, getOwnerBoo
 
 const bookingRouter = express.Router();
 
-bookingRouter.post('check-availability', checkAvailabilityofCar)
+bookingRouter.post('/check-availability', checkAvailabilityofCar)
 bookingRouter.post('/create', protect, createBooking)
 bookingRouter.get('/user', protect, getUserBookings)
 bookingRouter.get('/owner', protect, getOwnerBookings)

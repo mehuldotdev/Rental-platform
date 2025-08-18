@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { assets } from '../../assets/assets'
+import { useAppContext } from "../../context/AppContext.jsx"
+import toast from 'react-hot-toast'
 
 const AddCar = () => {
+
+  const {axios, currency} = useAppContext()
 
   const [image, setImage] = useState(null)
   const [car, setCar] = useState({
@@ -25,11 +29,44 @@ const AddCar = () => {
     }))
   }
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log('Car data:', car);
-    console.log('Image:', image);
-    // TODO: Add API call to save car
+    if(isLoading) return null
+    setIsLoading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('image', image)
+      formData.append('carData', JSON.stringify(car))
+
+      const {data} = await axios.post('/api/owner/add-car', formData)
+
+      if(data.success){
+        toast.success(data.message)
+        setImage(null)
+        setCar({
+          brand: '',
+          model: '',
+          year: new Date().getFullYear(),
+          pricePerDay: 0,
+          category: '',
+          fuel_type: '',
+          seating_capacity: 4,
+          transmission: '',
+          location: '',
+          description: ''
+        })
+      }else{
+        toast.error(data.message)
+      }
+
+    } catch (error) {
+      toast.error(error.message)
+    }finally{
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -225,7 +262,7 @@ const AddCar = () => {
           type="submit" 
           className='bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded transition-colors duration-200'
         >
-          Add Car
+          {isLoading ? 'Listing your car...' : 'Add Car'}
         </button>
       </form>
     </div>

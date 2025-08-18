@@ -43,7 +43,7 @@ const Sidebar = () => {
             </label>
         </div>
         {image && (
-            <button className='absolute top-0 right-0 flex p-2 gap-1 text-white cursor-pointer '>Save <img src={assets.check_icon} alt="" width={13} onClick ={updateImage} /></button>
+            <button className='absolute top-0 right-0 flex p-2 gap-1 text-white cursor-pointer' onClick ={updateImage}>Save <img src={assets.check_icon} alt="" width={13}  /></button>
         )}
         <p className='mt-2 text-base max-md:hidden'>{user?.name || ''}</p>
         <div className=''>

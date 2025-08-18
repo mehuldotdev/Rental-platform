@@ -55,7 +55,7 @@ export const AppProvider = ({children})=> {
         setToken(null)
         setUser(null)
         setIsOwner(false)
-        delete axios.defaults.headers.common.Authorization
+        delete axios.defaults.headers.common['Authorization']
         toast.success("You have been logged out successfully")
         navigate('/')
     }

@@ -8,24 +8,66 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { assets, dummyCarData } from '../../assets/assets';
+import { assets } from '../../assets/assets';
 import { Eye, EyeOff } from 'lucide-react';
-
-
+import {useAppContext} from "../../context/AppContext.jsx"
+import toast from 'react-hot-toast';
 
 const ManageCars = () => {
 
-  const currency = import.meta.env.VITE_CURRENCY
+  const {isOwner, axios, currency} = useAppContext()
 
   const [cars, setCars] = useState([]);
 
-  const fetchOwnercars = async ()=>{
-    setCars(dummyCarData)
+  const fetchOwnerCars = async ()=>{
+    try {
+      const {data} = await axios.get('/api/owner/cars')
+      if(data.success){
+        setCars(data.cars)
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  const toggleAvailability = async (carId)=>{
+    try {
+      const {data} = await axios.post('/api/owner/toggle-car', {carId})
+      if(data.success){
+        toast.success(data.message)
+        fetchOwnerCars()
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+    const deleteCar = async (carId)=>{
+    try {
+
+      const confirm = window.confirm('Delete the car permanently?')
+
+      if(!confirm) return null;
+
+      const {data} = await axios.post('/api/owner/delete-car', {carId})
+      if(data.success){
+        toast.success(data.message)
+        fetchOwnerCars()
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   useEffect(()=>{
-    fetchOwnercars()
-  }, [])
+    isOwner && fetchOwnerCars()
+  }, [isOwner])
 
   return (
     <div className='lg:px-20 px-10 mt-10'>
@@ -54,14 +96,14 @@ const ManageCars = () => {
                 </TableCell>
                 <TableCell className="py-2">{car.model}</TableCell>
                 <TableCell className="py-2">{currency}{car.pricePerDay}</TableCell>
-                <TableCell><span className={`max-md:hidden rounded-full px-3 py-1 ${car.isAvaliable ? "bg-green-300/40" : "bg-red-500"}`}>{car.isAvaliable ? "Available" : "Unavailable"}</span></TableCell>
+                <TableCell><span className={`max-md:hidden rounded-full px-3 py-1 ${car.isAvailable ? "bg-green-300/40" : "bg-red-500"}`}>{car.isAvaliable ? "Available" : "Unavailable"}</span></TableCell>
                 <TableCell className="py-2">
                   <div className='flex items-center p-3'>
-                    <span className='pr-2.5'>{car.isAvaliable
-                      ? <Eye className='cursor-pointer text-green-500' />
-                    : <EyeOff className='cursor-pointer text-red-500' />
+                    <span className='pr-2.5'>{car.isAvailable
+                      ? <Eye onClick={()=> toggleAvailability(car._id)} className='cursor-pointer text-green-500' />
+                    : <EyeOff onClick={()=> toggleAvailability(car._id)} className='cursor-pointer text-red-500' />
                     }</span>
-                    <Trash className='cursor-pointer' />
+                    <Trash onClick={()=> deleteCar(car._id)} className='cursor-pointer' />
                     </div>
                     </TableCell>
               </TableRow>

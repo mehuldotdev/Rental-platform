@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { assets, dummyMyBookingsData } from '../assets/assets'
+import { assets } from '../assets/assets'
+import { useAppContext } from '../context/AppContext'
+import toast from 'react-hot-toast'
 
 // git commits working or not
 
 const MyBookings = () => {
-  const currency = import.meta.env.VITE_CURRENCY
+
+  const {axios, user, currency} = useAppContext()
   const [bookings, setbookings] = useState([])
 
   const fetchMyBookings = async ()=> {
-    setbookings(dummyMyBookingsData)
+    try {
+      const {data} = await axios.get('/api/bookings/user')
+      if(data.success){
+        setbookings(data.bookings)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   useEffect(()=>{
-    fetchMyBookings()
+    user && fetchMyBookings()
     window.scrollTo(0, 0)
-  }, [])
+  }, [user])
 
   return (
     <div className='flex flex-col px-6 md:px-16 xl:px-32 2xl:px-48 items-center mt-16 max-w-7xl'>
@@ -22,6 +34,7 @@ const MyBookings = () => {
       <p className='font-semibold mt-4 text-sm text-white/60'>View and manage your all car bookings</p>
       <div className='w-full'>
         {bookings.map((booking, index)=>{
+          const car = booking.car || {};
           return (
             <div key={booking._id} className='grid grid-cols-1 md:grid-cols-4 gap-6 p-6 border border-gray-200 rounded-lg mt-5 first:mt-12'>
               <div className='md:col-span-1'>
@@ -61,7 +74,7 @@ const MyBookings = () => {
                 <div>
                   <p>Total price</p>
                   <h1 className='text-2xl font-semibold'>{currency}{booking.price}</h1>
-                  <p>Booked on {booking.createdAt.split('T'[0])}</p>
+                  <p>Booked on {booking.createdAt.split('T')[0]}</p>
                 </div>
               </div>
             </div>

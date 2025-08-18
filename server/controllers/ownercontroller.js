@@ -92,16 +92,20 @@ export const toggleCarAvailability = async(req,res) =>{
     try {
         const {_id} = req.user;
         const { carId } = req.body;
-        const car = await Car.findById({carId})
+        const car = await Car.findById(carId)
+
+        if(!car){
+            return res.json({success:false, message:"Car not found"})
+        }
+
         if(car.owner.toString() !== _id.toString()){
-            res.json({success:false, message: "Unauthorized"});
+            return res.json({success:false, message: "Unauthorized"});
         }
 
         car.isAvailable = !car.isAvailable;
         await car.save()
-        res.json({success:true, message:"Availability toggled"})
+        return res.json({success:true, message:"Availability toggled"})
 
-        res.json({success:true, cars})
     } catch (error) {
         console.log(error.message);
         res.json({success:false, message:"failed to get list of cars"});
@@ -114,17 +118,15 @@ export const deleteCar = async(req,res) =>{
     try {
         const {_id} = req.user;
         const { carId } = req.body;
-        const car = await Car.findById({carId})
+        const car = await Car.findById(carId)
         if(car.owner.toString() !== _id.toString()){
             res.json({success:false, message: "Unauthorized"});
         }
 
-        car.owner = null;
         car.isAvailable = false;
+        car.owner = null;
         await car.save()
         res.json({success:true, message:"Car has been removed."})
-
-        res.json({success:true, cars})
     } catch (error) {
         console.log(error.message);
         res.json({success:false, message:"failed to get list of cars"});
@@ -136,34 +138,35 @@ export const deleteCar = async(req,res) =>{
 
 export const getDashboardData = async(req,res) => {
     try {
-        const {_id, role} = req.body;
+        const {_id, role} = req.user;
 
-        if(role!==owner){
-            res.json({success:false, message:"Unauthorized access"})
+        if(role !== 'owner'){
+            return res.status(403).json({success:false, message:"Unauthorized access"})
         }
 
         const cars = await Car.find({owner: _id})
 
-        // Done after creating the booking model, basically to check if the booking is completed or not and display the same on dashboard.
-
+        // Sorted newest first and populated with car
         const bookings = await Booking.find({owner: _id}).populate('car').sort({createdAt: -1});
 
-        const pendingBookings = await Booking.find({owner: _id, status: "pending"})
-        const completedBookings = await Booking.find({owner: _id, status: "completed"})
+        const pendingBookings = await Booking.countDocuments({owner: _id, status: "pending"})
+        const confirmedBookings = await Booking.countDocuments({owner: _id, status: "confirmed"})
 
-        // Calculating revenue
-
-        const monthlyRevenue = bookings.slice().filter(booking => booking.status === 'confirmed').reduce((acc, booking)=> acc+ booking.price, 0)
+        // Calculating revenue from confirmed bookings
+        const monthlyRevenue = bookings
+            .filter(booking => booking.status === 'confirmed')
+            .reduce((acc, booking)=> acc + booking.price, 0)
 
         const dashboardData = {
             totalCars: cars.length,
             totalBookings: bookings.length,
-            pendingBookings: pendingBookings.length,
-            completedBookings: completedBookings.length,
+            pendingBookings: pendingBookings,
+            completedBookings: confirmedBookings,
+            recentBookings: bookings.slice(0, 5),
             monthlyRevenue
         }
 
-        res.json({success: true, message: dashboardData})
+        res.json({success: true, data: dashboardData})
 
     } catch (error) {
      console.log(error.message);

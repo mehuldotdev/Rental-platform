@@ -4,24 +4,45 @@ import { assets, dummyCarData } from '../assets/assets.js'
 import { Button } from "@/components/ui/button"
 import Loader from '../components/Loader.jsx'
 import { Undo2, ArrowLeft } from 'lucide-react'
+import { useAppContext } from "../context/AppContext.jsx"
+import toast from 'react-hot-toast'
+
+
+
 
 
 const CardDetails = () => {
-  const handleSubmit = async(e) => {
-    e.preventdefault();
-  }
 
-  window.scrollTo(0, 0)
+
+  const {axios, cars, navigate, pickupDate, setpickupDate, returnDate, setreturnDate} = useAppContext()
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try {
+      const {data} = await axios.post('/api/bookings/create', {
+        car: id, pickupDate, returnDate
+      })
+
+      if(data.success){
+        toast.success(data.message)
+        navigate('/my-bookings')
+      }
+      else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
 
   const currency = import.meta.env.VITE_CURRENCY
   const {id} = useParams()
-  const navigate = useNavigate()
   const [car, setCar] = useState(null)
 
   useEffect(()=>{
-    const foundCar = dummyCarData.find(car => car._id === id);
+    const foundCar = cars.find(car => car._id === id);
     setCar(foundCar);
-  }, [id])
+  }, [cars, id])
 
   return car?( 
     <div className='flex flex-col px-6 md:px-16 lg:px24 mt-16'>
@@ -66,19 +87,21 @@ const CardDetails = () => {
             </div>
           </div>
         </div>
+
         {/* Right : Booking form */}
+
         <form onSubmit={handleSubmit} className='border-2 shadow-lg h-max sticky top-10 rounded-xl p-6 spac-y-6 text-gray-500'>
           <p className='flex items-center justify-between text-2xl text-gray-300'>{currency}{car.pricePerDay} <span className='text-base font-normal'>per day</span> </p>
           <hr className='border-1 border-blue-600 my-6' />
           <div className='flex flex-col'>
           <label htmlFor="pickup-date">Pickup date</label>
-          <input type="date" className='text-white mt-4 border border-borderColor px-3 py-2 rounded-lg' required id='pickup-date' min={new Date().toISOString().split('T')[0]} />
+          <input value={pickupDate} onChange={(e)=>setpickupDate(e.target.value)} type="date" className='text-white mt-4 border border-borderColor px-3 py-2 rounded-lg' required id='pickup-date' min={new Date().toISOString().split('T')[0]} />
           </div>
           <div className='mt-4 flex flex-col'>
           <label htmlFor="return-date">Return date</label>
-          <input type="date" className='text-white mt-4 border border-borderColor px-3 py-2 rounded-lg' required id='return-date' />
+          <input value={returnDate} onChange={(e)=>setreturnDate(e.target.value)} type="date" className='text-white mt-4 border border-borderColor px-3 py-2 rounded-lg' required id='return-date' />
           </div>
-          <Button className="w-full py-6 mt-4 bg-blue-600">Book Now</Button>
+          <Button type="submit" className="w-full py-6 mt-4 bg-blue-600">Book Now</Button>
         </form>
       </div>
     </div>

@@ -25,7 +25,7 @@ app.use(express.json()); // Allows incoming json data to become parsed into req.
 app.get('/', (req, res)=> res.send("Running server"));
 app.use('/api/user', userRouter);
 app.use('/api/owner', ownerRouter);
-app.use('/api/booking', bookingRouter)
+app.use('/api/bookings', bookingRouter)
 
 const PORT = process.env.PORT || 3000;
 

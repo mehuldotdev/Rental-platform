@@ -7,17 +7,38 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
-import { dummyMyBookingsData } from '../../assets/assets';
+import {useAppContext} from "../../context/AppContext.jsx"
+import toast from 'react-hot-toast'
 
 const ManageBookings = () => {
 
-  const currency = import.meta.env.VITE_CURRENCY
+  const {currency, axios} = useAppContext()
 
   const [bookings, setBookings] = useState([]);
 
   const fetchOwnerBookings = async () => {
-    setBookings(dummyMyBookingsData);
+    try {
+      const {data} = await axios.get('/api/bookings/owner')
+      data.success ? setBookings(data.bookings) : toast.error(data.message)
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
+  const changeBookingStatus = async (bookingId, status) => {
+    try {
+      const {data} = await axios.post('/api/bookings/change-status',
+      {bookingId, status})
+      if(data.success){
+        toast.success(data.message)
+        fetchOwnerBookings()
+      }else{
+        toast.error(data.message)
+      }
+      
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   useEffect(()=>{
@@ -55,17 +76,28 @@ const ManageBookings = () => {
                 <TableCell>
                   <span className='bg-white/30 rounded-full px-3 py-1'>offline</span>
                 </TableCell>
-                <TableCell>
-                  {bookings.status === 'pending' ? (
-                    <select value={bookings.status}>
-                      <option value="pending">Pending</option>
-                      <option value="cancelled">Cancelled</option>
-                      <option value="confirmed">Confirmed</option>
-                    </select>
-                  ): (
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${bookings.status === 'confirmed' ? 'bg-green-600 text-white' : 'bg-red-100 text-red-500' }`}>Confirmed</span>
-                  ) }
-                </TableCell>
+                <TableCell className="relative">
+        {/* Transparent select over the styled span */}
+        <select
+          onChange={e => changeBookingStatus(bookings._id, e.target.value)}
+          value={bookings.status}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+        >
+          <option value="pending">Pending</option>
+          <option value="cancelled">Cancelled</option>
+          <option value="confirmed">Confirmed</option>
+        </select>
+
+        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+          bookings.status === 'confirmed'
+            ? 'bg-green-600 text-white'
+            : bookings.status === 'cancelled'
+            ? 'bg-red-100 text-red-500'
+            : 'bg-yellow-100 text-yellow-600'
+        } cursor-pointer`}>
+          {bookings.status.charAt(0).toUpperCase() + bookings.status.slice(1)}
+        </span>
+      </TableCell>
               </TableRow>
             ))}
           </TableBody>
