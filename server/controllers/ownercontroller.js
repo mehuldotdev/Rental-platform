@@ -2,6 +2,7 @@ import imagekit from "../configs/imageKit.js";
 import User from "../models/user.models.js"
 import Car from "../models/Car.js"
 import fs from "fs";
+import Booking from "../models/Bookings.js";
 
 // Changing role of user
 
@@ -133,7 +134,7 @@ export const deleteCar = async(req,res) =>{
 
 // Get dashboard data for the owner
 
-const getDashboardData = async(req,res) => {
+export const getDashboardData = async(req,res) => {
     try {
         const {_id, role} = req.body;
 
@@ -143,8 +144,68 @@ const getDashboardData = async(req,res) => {
 
         const cars = await Car.find({owner: _id})
 
+        // Done after creating the booking model, basically to check if the booking is completed or not and display the same on dashboard.
+
+        const bookings = await Booking.find({owner: _id}).populate('car').sort({createdAt: -1});
+
+        const pendingBookings = await Booking.find({owner: _id, status: "pending"})
+        const completedBookings = await Booking.find({owner: _id, status: "completed"})
+
+        // Calculating revenue
+
+        const monthlyRevenue = bookings.slice().filter(booking => booking.status === 'confirmed').reduce((acc, booking)=> acc+ booking.price, 0)
+
+        const dashboardData = {
+            totalCars: cars.length,
+            totalBookings: bookings.length,
+            pendingBookings: pendingBookings.length,
+            completedBookings: completedBookings.length,
+            monthlyRevenue
+        }
+
+        res.json({success: true, message: dashboardData})
+
     } catch (error) {
      console.log(error.message);
      res.json({success:false, message: "Failed to get dashboard data."})   
+    }
+}
+
+// API to update the user image
+
+export const updatedUserImage = async(req,res)=>{
+    try {
+        const {_id} = req.user;
+        const imageFile = req.file;
+
+        // Uploading pfp on imageKit
+
+        const fileBuffer = fs.readFileSync(imageFile.path)
+        const response = await imagekit.upload({
+            file: fileBuffer,
+            fileName: imageFile.originalname,
+            folder: '/users'
+        })
+
+        // Optimising the image
+
+        var optimizedimageURL = imagekit.url({
+            path: response.filePath,
+            transformation: [
+                {width: '400'},
+                {quality: "auto"},
+                {format: "webp"}
+            ]
+        })
+
+        const image = optimizedimageURL;
+
+        await User.findByIdAndUpdate(_id, {image});
+        res.json({success: true, message: "Profile picture was updated"})
+
+
+    } catch (error) {
+        console.log(error.message);
+        res.json({success:false, message:"Failed to update image"})
     }
 }

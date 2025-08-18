@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./db.js";
 import userRouter from "./routes/userRoutes.js";
 import ownerRouter from "./routes/ownerRoutes.js";
+import bookingRouter from "./routes/BookingRoutes.js";
 
 // Initialising the webapp
 
@@ -23,7 +24,8 @@ app.use(express.json()); // Allows incoming json data to become parsed into req.
 
 app.get('/', (req, res)=> res.send("Running server"));
 app.use('/api/user', userRouter);
-app.use('/api/owner', ownerRouter)
+app.use('/api/owner', ownerRouter);
+app.use('/api/booking', bookingRouter)
 
 const PORT = process.env.PORT || 3000;
 
