@@ -1,17 +1,34 @@
 import React from 'react'
 import { useState } from 'react';
-import { assets, dummyUserData, ownerMenuLinks } from '../../assets/assets'
+import { assets, ownerMenuLinks } from '../../assets/assets'
 import { NavLink, useLocation } from 'react-router-dom';
+import { useAppContext } from "../../context/AppContext.jsx"
+import toast from 'react-hot-toast';
 
 const Sidebar = () => {
 
-    const user = dummyUserData;
+    const {user, axios, fetchUser} = useAppContext();
     const location = useLocation();
     const [image, setImage] = useState('')
 
     const updateImage = async()=>{
-        user.image = URL.createObjectURL(image)
-        setImage('')
+        try {
+            const formData = new FormData()
+            formData.append('image', image)
+
+            const {data} = await axios.post('/api/owner/update-image', formData)
+
+            if(data.success){
+                fetchUser()
+                toast.success(data.message)
+                setImage('')
+            }else{
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+            toast.error(error.message) 
+        }
     }
 
   return (
@@ -28,7 +45,7 @@ const Sidebar = () => {
         {image && (
             <button className='absolute top-0 right-0 flex p-2 gap-1 text-white cursor-pointer '>Save <img src={assets.check_icon} alt="" width={13} onClick ={updateImage} /></button>
         )}
-        <p className='mt-2 text-base max-md:hidden'>{user.name}</p>
+        <p className='mt-2 text-base max-md:hidden'>{user?.name || ''}</p>
         <div className=''>
             {ownerMenuLinks.map((link, index)=>(
                 <NavLink key={index} to={link.path} className={`relative flex items-center gap-2 w-full py-3 pl-4 first:mt-6 ${link.path===location.pathname ? ' text-blue-400' : 'text-white'}`}>

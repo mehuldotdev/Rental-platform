@@ -4,13 +4,32 @@ import { Link, Links, useLocation, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search } from 'lucide-react'
+import { useAppContext } from '../context/AppContext.jsx'
+import toast from 'react-hot-toast'
 
 
 
-const Navbar = ({setShowLogin}) => {
+const Navbar = ({}) => {
+
+    const {setShowLogin, user,logout, isOwner, axios, setIsOwner} = useAppContext()
+
     const location = useLocation()
     const [open, setOpen] = useState(false)
     const navigate = useNavigate()
+    const changeRole = async ()=> {
+        try {
+            const { data } = await axios.post('/api/owner/change-role')
+            if(data.success) {
+                setIsOwner(true)
+                toast.success(data.message)
+                navigate('/owner')
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+        }
+    }
 
   return (
     <div className={`bg-black flex items-center justify-between px-6 md:px-6 lg:px-24xl:px-3 py-4 border-b relative transition-all ${location.pathname === "/" && "bg-amber-300"}`}>
@@ -36,8 +55,8 @@ const Navbar = ({setShowLogin}) => {
         
 
         <div className='flex gap-5 max-sm:flex-col max-sm:gap-2'>
-            <Button onClick={()=>navigate('/owner')} className="cursor-pointer">Dashboard</Button>
-            <Button onClick={()=>setShowLogin(true)} className="bg-blue-700 cursor-pointer">Log in</Button>
+            <Button onClick={()=> isOwner ? navigate('/owner') : changeRole()} className="cursor-pointer">{isOwner ? "Dashboard" : "List cars"}</Button>
+            <Button onClick={()=>{user ? logout() : setShowLogin(true)}} className="bg-blue-700 cursor-pointer">{user ? "Logout" : "Log in"}</Button>
         </div>
         </div>
         
