@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { assets } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 // git commits working or not
 
@@ -29,6 +30,7 @@ const MyBookings = () => {
   }, [user])
 
   return (
+    <BlurFade delay={1}>
     <div className='flex flex-col px-6 md:px-16 xl:px-32 2xl:px-48 items-center mt-16 max-w-7xl'>
       <h1 className='font-bold text-4xl'>My Bookings</h1>
       <p className='font-semibold mt-4 text-sm text-white/60'>View and manage your all car bookings</p>
@@ -36,6 +38,7 @@ const MyBookings = () => {
         {bookings.map((booking, index)=>{
           const car = booking.car || {};
           return (
+            <BlurFade delay={2}>
             <div key={booking._id} className='grid grid-cols-1 md:grid-cols-4 gap-6 p-6 border border-gray-200 rounded-lg mt-5 first:mt-12'>
               <div className='md:col-span-1'>
                 <div className='rounded-md overflow-hidden mb-3'>
@@ -78,10 +81,12 @@ const MyBookings = () => {
                 </div>
               </div>
             </div>
+            </BlurFade>
           )
         })}
       </div>
     </div>
+    </BlurFade>
   )
 }
 

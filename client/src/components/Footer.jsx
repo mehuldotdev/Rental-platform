@@ -1,5 +1,6 @@
 import React from 'react'
 import logo from "../assets/logo.svg"
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const Footer = () => {
     const linkSections = [
@@ -18,6 +19,7 @@ const Footer = () => {
     ];
 
     return (
+        <BlurFade delay={0.8} inView>
         <div className="border-t-2 px-6 mt-70 md:px-16 lg:px-24 xl:px-32">
             <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-gray-500/30 text-gray-500">
                 <div>
@@ -43,6 +45,7 @@ const Footer = () => {
                 Copyright 2025 © <a href="https://prebuiltui.com">PrebuiltUI</a> All Right Reserved.
             </p>
         </div>
+        </BlurFade>
     );
 };
 

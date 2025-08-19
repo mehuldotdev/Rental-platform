@@ -10,9 +10,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const Banner = () => {
   return (
+    <BlurFade delay={0.8} inView>
     <div className='overflow-hidden sm:mx-20'>
         <Card className="sm:p-5 md:mx-20 lg:mx-20 bg-gradient-to-r from-sky-600 to-slate-50 border-0">
         <div className="flex flex-row items-center justify-evenly flex-1">
@@ -32,6 +34,7 @@ We take care of insurance, driver verification and secure payments — so <br />
     </div>
 </Card>
     </div>
+    </BlurFade>
             
   )
 }

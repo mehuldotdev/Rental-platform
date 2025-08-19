@@ -7,6 +7,7 @@ import CarCard from '../components/CarCard.jsx'
 import { useAppContext } from "../context/AppContext.jsx"
 import { useSearchParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const Cars = () => {
 
@@ -62,7 +63,7 @@ const Cars = () => {
 
   
   return (
-    
+    <BlurFade delay={1}>
     <div className='flex flex-col py-20 max-md:px-4 text-center items-center'>
       <h1 className='font-semibold text-5xl'>Available Cars</h1>
       <p className='font-semibold text-sm text-white/60 mt-4'>Browse our selection of premium vehicles available for your next adventure</p>
@@ -72,12 +73,15 @@ const Cars = () => {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-4 xl:px-20 max-w-7xl mx-auto'>
           {filteredCars.map((car, index)=>(
             <div key={index}>
+              <BlurFade delay={2}>
               <CarCard car={car} />
+              </BlurFade>
             </div>
           ))}
         </div>
       </div>
     </div>
+    </BlurFade>
 
   )
 }

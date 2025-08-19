@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Search } from 'lucide-react'
 import { useAppContext } from '../context/AppContext.jsx'
 import toast from 'react-hot-toast'
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 
 
@@ -32,6 +33,7 @@ const Navbar = ({}) => {
     }
 
   return (
+    <BlurFade delay={1}>
     <div className={`bg-black flex items-center justify-between px-6 md:px-6 lg:px-24xl:px-3 py-4 border-b relative transition-all ${location.pathname === "/" && "bg-amber-300"}`}>
         <Link to='/'>
         <img src={assets.logo} alt="Logo" />
@@ -49,9 +51,7 @@ const Navbar = ({}) => {
                 </Link>
             ))}
 
-            <div className='lg:flex items-start text-sm gap-2 px-3 max-sm:px-0'>
-                <Input className="rounded-full max-w-45 max-sm:w-full" type="text" placeholder="Search for cars..."/>
-            </div>
+            
         
 
         <div className='flex gap-5 max-sm:flex-col max-sm:gap-2'>
@@ -63,8 +63,8 @@ const Navbar = ({}) => {
         <Button className="sm:hidden cursor-pointer" onClick={()=>setOpen(!open)}>
             <img src={open ? assets.close_icon : assets.menu_icon} alt="menu" />
         </Button>
-
     </div>
+    </BlurFade>
 
     
   )

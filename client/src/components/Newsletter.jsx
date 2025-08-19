@@ -3,10 +3,12 @@ import { useId } from "react"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { BlurFade } from "@/components/magicui/blur-fade";
 
 const Newsletter = () => {
   const id = useId()
   return (
+    <BlurFade delay={0.8} inView>
     <div className='flex flex-col items-center justify-between mt-40'>
       <h1 className='text-5xl font-bold'>Never miss a deal.</h1>
       <h2 className='text-gray-400 mt-5'>Subscribe to get the latest offers, new arrivals, and exclusive discounts
@@ -23,6 +25,7 @@ const Newsletter = () => {
       </p>
     </div>
     </div>
+    </BlurFade>
   )
 }
 
